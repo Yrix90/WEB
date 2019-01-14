@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, escape
 from vsearch import search4letters
-
+import mysql.connector
 
 
 app = Flask(__name__)
@@ -11,7 +11,6 @@ def log_request(req: 'flask_request', res: str) -> None:
                 'user': 'vsearch',
                 'password': 'vsearchpasswd',
                 'database': 'vsearchlogDB', }
-    import mysql.connector
     conn = mysql.connector.connect(**dbconfig)
     cursor = conn.cursor()
     _SQL = """insert into log
