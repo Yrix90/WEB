@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, escape
 from vsearch import search4letters
-import mysql.connector
-
+from DBcm import DataBaseUse
 
 app = Flask(__name__)
 
@@ -11,20 +10,16 @@ def log_request(req: 'flask_request', res: str) -> None:
                 'user': 'vsearch',
                 'password': 'vsearchpasswd',
                 'database': 'vsearchlogDB', }
-    conn = mysql.connector.connect(**dbconfig)
-    cursor = conn.cursor()
-    _SQL = """insert into log
-            (phrase, letters, ip, browser_string, results)
-            values
-            (%s, %s, %s, %s, %s)"""
-    cursor.execute(_SQL, (req.form['phrase'],
-                          req.form['letters'],
-                          req.remote_addr,
-                          req.user_agent.browser,
-                          res, ))
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with DataBaseUse(dbconfig) as cursor:
+        _SQL = """insert into log
+                (phrase, letters, ip, browser_string, results)
+                values
+                (%s, %s, %s, %s, %s)"""
+        cursor.execute(_SQL, (req.form['phrase'],
+                              req.form['letters'],
+                              req.remote_addr,
+                              req.user_agent.browser,
+                              res,))
 
 
 @app.route('/search4', methods=['POST'])
@@ -46,6 +41,7 @@ def do_search() -> 'html':
 def entry_page() -> 'html':
     return render_template('entry.html',
                            the_title='Welcome to search4letters on the web!')
+
 
 @app.route('/viewlog')
 def view_the_log() -> 'html':
