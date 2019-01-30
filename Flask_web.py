@@ -11,13 +11,21 @@ app.config['dbconfig'] = {'host': '127.0.0.1',
                           'database': 'vsearchlogDB', }
 
 
-@app.route('/login')
-def do_login() -> str:
+@app.route('/login', methods=['POST'])
+def do_login() -> 'html':
+    user_prof = request.form['user_prof']
+    user_passwd = request.form['user_passwd']
+    title = 'Вы вошли в систему как: ' + user_prof
+    # results = str(search4letters(phrase, letters))
+    # log_request(request, results)
     session['logged_in'] = True
-    return 'You are now logged in.'
+    return render_template('identifications.html',
+                           the_user=user_prof,
+                           the_title=title, )
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
+@check_logged_in
 def do_logout() -> str:
     session.pop('logged_in')
     return 'You are now logged out.'
@@ -37,6 +45,7 @@ def log_request(req: 'flask_request', res: str) -> None:
 
 
 @app.route('/search4', methods=['POST'])
+@check_logged_in
 def do_search() -> 'html':
     phrase = request.form['phrase']
     letters = request.form['letters']
@@ -51,13 +60,26 @@ def do_search() -> 'html':
 
 
 @app.route('/')
-@app.route('/entry')
+def welcome() -> 'html':
+    return render_template('login.html',
+                           the_title='Welcome to login for search4letters on the web!')
+
+
+@app.route('/menu', methods=['POST'])
+@check_logged_in
+def menu() -> 'html':
+    return render_template('menu.html',
+                           the_title='Welcome to menu for search4letters on the web!')
+
+
+@app.route('/entry', methods=['POST'])
+@check_logged_in
 def entry_page() -> 'html':
     return render_template('entry.html',
                            the_title='Welcome to search4letters on the web!')
 
 
-@app.route('/viewlog')
+@app.route('/viewlog', methods=['POST'])
 @check_logged_in
 def view_the_log() -> 'html':
     with DataBaseUse(app.config['dbconfig']) as cursor:

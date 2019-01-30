@@ -1,0 +1,14 @@
+{% extends 'body.html' %}
+{% block body %}
+<h2>{{ the_title }}</h2>
+
+<form method="POST" action="/login">
+    <table>
+        <p>Введите учетные данные:</p>
+        <tr><td>Login:</td><td><input name="user_prof" type="TEXT"></td></tr>
+        <tr><td>Password:</td><td><input name="user_passwd" type="TEXT"></td></tr>
+    </table>
+    <p><input value="Sign in" type="SUBMIT"></p>
+</form>
+
+{% endblock %}

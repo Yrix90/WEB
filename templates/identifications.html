@@ -1,0 +1,14 @@
+{% extends 'body.html' %}
+{% block body %}
+<h2>{{ the_title }}</h2>
+
+<form method="POST" action="/menu">
+    <p>Перейти в меню:</p>
+    <p><input value="menu" type="SUBMIT"></p>-
+</form>
+<form method="POST" action="/logout">
+    <p>Выйти из системы:</p>
+    <p><input value="Sign out" type="SUBMIT"></p>
+</form>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'body.html' %}
+{% block body %}
+<h2>{{ the_title }}</h2>
+
+<form method="POST" action="/entry">
+    <p>Перейти к программе</p>
+    <p><input value="search4letters" type="SUBMIT"></p>
+</form>
+<form method="POST" action="/viewlog">
+    <p>Перейти к программе</p>
+    <p><input value="viewlog" type="SUBMIT"></p>
+</form>
+<form method="POST" action="/logout">
+    <p>Выйти из системы:</p>
+    <p><input value="Sign out" type="SUBMIT"></p>
+</form>
+
+{% endblock %}
