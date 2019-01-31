@@ -16,9 +16,8 @@ def do_login() -> 'html':
     user_prof = request.form['user_prof']
     user_passwd = request.form['user_passwd']
     title = 'Вы вошли в систему как: ' + user_prof
-    # results = str(search4letters(phrase, letters))
-    # log_request(request, results)
-    session['logged_in'] = True
+    #условие: если учетные данные совподают с данными из БД то выполняем действие
+    #session['logged_in'] = True
     return render_template('identifications.html',
                            the_user=user_prof,
                            the_title=title, )
