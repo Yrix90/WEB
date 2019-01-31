@@ -13,21 +13,30 @@ app.config['dbconfig'] = {'host': '127.0.0.1',
 
 @app.route('/login', methods=['POST'])
 def do_login() -> 'html':
+    with DataBaseUse(app.config['dbconfig']) as cursor:
+        _SQL = """select username, userpasswd
+                from users"""
+        cursor.execute(_SQL)
+        contents = dict(cursor.fetchall())
     user_prof = request.form['user_prof']
     user_passwd = request.form['user_passwd']
-    title = 'Вы вошли в систему как: ' + user_prof
-    #условие: если учетные данные совподают с данными из БД то выполняем действие
-    #session['logged_in'] = True
-    return render_template('identifications.html',
+    if contents[user_prof] == user_passwd:
+        session['logged_in'] = True
+        title = 'Вы вошли в систему как: ' + user_prof
+        web = 'identifications.html'
+    else:
+        title = 'Учетные данные не верны'
+        web = 'login.html'
+    return render_template(web,
                            the_user=user_prof,
                            the_title=title, )
 
 
 @app.route('/logout', methods=['POST'])
-@check_logged_in
-def do_logout() -> str:
+def do_logout() -> 'html':
     session.pop('logged_in')
-    return 'You are now logged out.'
+    return render_template('login.html',
+                           the_title='You are now logged out.',)
 
 
 def log_request(req: 'flask_request', res: str) -> None:
