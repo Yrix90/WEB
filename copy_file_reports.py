@@ -11,6 +11,7 @@ pc063 = '//172.27.2.63/c$/Offline_opera_reports/'
 pc066 = '//172.27.2.66/c$/Offline_opera_reports/'
 pc065 = '//172.27.2.65/c$/Offline_opera_reports/'
 list_for_pc = [pc061, pc062, pc063, pc065, pc066]
+list_for_litter = {'*departure_all*': 'Departures.pdf', '*arrchkinbyroom*': 'Arrival and checked in today.pdf', '*gibyroom*': 'Guest in house (by room).pdf', '*finopbalall*': 'Open balance (individuals).pdf'}
 
 tm = datetime.datetime.now()
 os.chdir(src)
