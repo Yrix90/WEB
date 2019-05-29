@@ -28,8 +28,11 @@ for filter_file in list_for_litter.keys():
         logging.info('Последний файл %s: %s\n' % (list_for_litter.get(filter_file), search_file))
         if os.path.isfile(search_file):
             for dst in list_for_pc:
-                shutil.copy2(search_file, dst + list_for_litter.get(filter_file), follow_symlinks=True)
-                logging.info('Файл %s скопирован в %s\n' % (search_file, dst))
+                if os.access(dst, os.W_OK):
+                    shutil.copy2(search_file, dst + list_for_litter.get(filter_file), follow_symlinks=True)
+                    logging.info('Файл %s скопирован в %s\n' % (search_file, dst))
+                else:
+                    logging.info('Удаленый каталог %s не доступен' % dst)
             os.remove(search_file)
             logging.info('Файл %s удален успешно\n' % search_file)
         else:
